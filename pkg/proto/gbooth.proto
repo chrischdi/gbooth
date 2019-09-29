@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package proto;
+
+service DSLR {
+    rpc Capture(ImageRequest) returns (ImageResponse) {}
+}
+
+message ImageRequest {
+}
+
+message ImageResponse {
+    bytes image = 1;
+    string format = 2;
+}

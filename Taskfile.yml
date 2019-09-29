@@ -1,0 +1,12 @@
+# SPDX-License-Identifier: MIT
+version: '2'
+
+vars:
+  GO_PACKAGES: 
+    sh: go list ./...
+  GO_FILES:
+    sh: find . -type f -name '*.go' -not -path "./vendor/*"
+
+includes:
+  checks: ./.tasks/checks.yml
+  build: ./.tasks/build.yml

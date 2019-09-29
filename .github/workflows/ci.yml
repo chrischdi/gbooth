@@ -28,3 +28,33 @@ jobs:
     - name: build
       run: |
         /opt/task build:dslr-amd64
+
+    - uses: actions/upload-artifact@master
+      with:
+        name: gbooth-dslr-amd64
+        path: bin/gbooth-dslr
+
+  build-arm:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: download task
+      run: |
+        pushd $(mktemp -d)
+        wget https://github.com/go-task/task/releases/download/v2.7.0/task_linux_amd64.tar.gz
+        tar -xvzf task_linux_amd64.tar.gz
+        mv task /opt/
+        popd
+    - name: register binfmt multiarch
+      run: |
+        docker run --name multiarch --rm --privileged multiarch/qemu-user-static:register
+    - name: build
+      run: |
+        /opt/task build:dslr-arm
+
+    - uses: actions/upload-artifact@master
+      with:
+        name: gbooth-dslr-arm
+        path: bin/gbooth-dslr
+
+

@@ -2,6 +2,7 @@ version: '2'
 
 tasks:
   all:
+    desc: "execute all checks"
     deps: [lint, fmtcheck, vet]
 
   lint:

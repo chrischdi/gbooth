@@ -1,0 +1,27 @@
+# SPDX-License-Identifier: MIT
+# Pipeline to run CI
+
+on:
+  pull_request:
+    branches:
+    - master
+
+jobs:
+  build-amd64:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: download task
+      run: |
+        pushd $(mktemp -d)
+        wget https://github.com/go-task/task/releases/download/v2.7.0/task_linux_amd64.tar.gz
+        tar -xvzf task_linux_amd64.tar.gz
+        mv task /opt/
+        popd
+    - name: execute checks
+      run: |
+        /opt/task checks:all
+    - name: build
+      run: |
+        /opt/task build:dslr-amd64
+        

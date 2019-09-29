@@ -1,0 +1,14 @@
+version: '2'
+
+tasks:
+  # all:
+  #   deps: [lint, fmtcheck, vet]
+
+  dslr-amd64:
+    desc: build dslr for amd64
+    cmds:
+    - go build -o bin/gbooth-dslr -v -x -ldflags="-s -w" ./cmd/dslr
+    env:
+      GOOS: linux
+      CGO_ENABLED: 1
+

@@ -26,7 +26,7 @@ var (
 func (s *server) Capture(ctx context.Context, in *proto.ImageRequest) (*proto.ImageResponse, error) {
 	img, _, err := s.dslr.Capture()
 	if err != nil {
-		return nil, fmt.Errorf("error during dslr.Capture: %w", err)
+		return nil, fmt.Errorf("error during dslr.Capture: %v", err)
 	}
 	return &proto.ImageResponse{Image: img, Format: "jpeg"}, nil
 }

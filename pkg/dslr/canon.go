@@ -28,7 +28,7 @@ func (c *Canon) Free() error {
 	c.mutex.Lock()
 	defer c.mutex.Unlock()
 	if err := c.cam.Exit(); err != nil {
-		return fmt.Errorf("error executing gphoto2go.Exit(): %w", err)
+		return fmt.Errorf("error executing gphoto2go.Exit(): %v", err)
 	}
 	return nil
 }
@@ -39,7 +39,7 @@ func (c *Canon) Capture() (data []byte, filename string, err error) {
 
 	fp, err := c.cam.TriggerCaptureToFile()
 	if err != nil {
-		return nil, "", fmt.Errorf("TriggerCaptureToFile: %w", err)
+		return nil, "", fmt.Errorf("TriggerCaptureToFile: %v", err)
 	}
 	cameraFileReader := c.cam.FileReader(fp.Folder, fp.Name)
 	defer cameraFileReader.Close()

@@ -1,0 +1,31 @@
+version: '2'
+
+tasks:
+  all:
+    deps: [lint, fmtcheck, vet]
+
+  lint:
+    desc: "lint via golangci-lint"
+    cmds:
+    - hack/check_golangci-lint.sh
+
+  fmtcheck:
+    desc: checking for formating errors
+    cmds:
+    - |
+      gofmt -l -s {{catLines .GO_FILES}} 1>/dev/null || gofmt_ret=$? && gofmt_ret=$?
+      if [[ $gofmt_ret -gt 0 ]]; then
+        echo "gofmt check failed for:"
+        gofmt -l -s {{catLines .GO_FILES}}
+        exit 1
+      fi
+
+  vet:
+    desc: "run go vet"
+    cmds:
+    - go vet {{catLines .GO_PACKAGES}}
+    
+  fmt:
+    desc: "fix go fmt failures"
+    cmds:
+    - go fmt {{catLines .GO_PACKAGES}}

@@ -22,7 +22,6 @@ var (
 	driver = flag.String("driver", "canon", "driver to use for dslr connection")
 )
 
-// Capture implements helloworld.GreeterServer
 func (s *server) Capture(ctx context.Context, in *proto.ImageRequest) (*proto.ImageResponse, error) {
 	img, _, err := s.dslr.Capture()
 	if err != nil {
@@ -32,6 +31,8 @@ func (s *server) Capture(ctx context.Context, in *proto.ImageRequest) (*proto.Im
 }
 
 func main() {
+	flag.Parse()
+
 	log.Printf("starting grpc server on %s", *port)
 	lis, err := net.Listen("tcp", *port)
 	if err != nil {
@@ -55,7 +56,7 @@ func main() {
 	if err := s.Serve(lis); err != nil {
 		if err := drv.Free(); err != nil {
 			log.Printf("warning: %v", err)
-			log.Fatalf("failed to serve: %v", err)
 		}
+		log.Fatalf("failed to serve: %v", err)
 	}
 }

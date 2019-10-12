@@ -1,62 +1,51 @@
 package main
 
 import (
-	"context"
-	"flag"
 	"fmt"
 	"log"
 	"net"
+	"os"
 
+	"github.com/chrischdi/gbooth/pkg/constants"
 	"github.com/chrischdi/gbooth/pkg/dslr"
 	"github.com/chrischdi/gbooth/pkg/proto"
 	"google.golang.org/grpc"
+
+	"github.com/spf13/cobra"
 )
 
-// server is used to implement proto.CameraServer.
-type server struct {
-	dslr dslr.DSLR
+func init() {
+	rootCmd.PersistentFlags().String("listen", constants.DSLRListen, "address to listen on for grpc")
+	rootCmd.PersistentFlags().String("driver", "gphoto2", "driver to use for dslr connection")
 }
 
-var (
-	port   = flag.String("listen", "127.0.0.1:50051", "address to listen on for grpc")
-	driver = flag.String("driver", "canon", "driver to use for dslr connection")
-)
+var rootCmd = &cobra.Command{
+	Use: "gboothctl",
+	RunE: func(cmd *cobra.Command, args []string) error {
+		log.Printf("starting grpc server on %s", cmd.Flag("listen").Value.String())
+		lis, err := net.Listen("tcp", cmd.Flag("listen").Value.String())
+		if err != nil {
+			log.Fatalf("failed to listen: %v", err)
+		}
 
-func (s *server) Capture(ctx context.Context, in *proto.ImageRequest) (*proto.ImageResponse, error) {
-	img, _, err := s.dslr.Capture()
-	if err != nil {
-		return nil, fmt.Errorf("error during dslr.Capture: %v", err)
-	}
-	return &proto.ImageResponse{Image: img, Format: "jpeg"}, nil
+		drv, err := dslr.NewDSLR(cmd.Flag("driver").Value.String())
+		if err != nil {
+			return err
+		}
+
+		s := grpc.NewServer()
+		proto.RegisterDSLRServer(s, drv)
+		if err := s.Serve(lis); err != nil {
+			return fmt.Errorf("error serving: %v", err)
+		}
+
+		return nil
+	},
 }
 
 func main() {
-	flag.Parse()
-
-	log.Printf("starting grpc server on %s", *port)
-	lis, err := net.Listen("tcp", *port)
-	if err != nil {
-		log.Fatalf("failed to listen: %v", err)
-	}
-
-	drv, err := dslr.NewDSLR(*driver)
-	if err != nil {
-		log.Fatalf(err.Error())
-	}
-
-	if err := drv.Init(); err != nil {
-		if err := drv.Free(); err != nil {
-			log.Printf("warning: %v", err)
-		}
-		log.Fatalf(err.Error())
-	}
-
-	s := grpc.NewServer()
-	proto.RegisterDSLRServer(s, &server{drv})
-	if err := s.Serve(lis); err != nil {
-		if err := drv.Free(); err != nil {
-			log.Printf("warning: %v", err)
-		}
-		log.Fatalf("failed to serve: %v", err)
+	if err := rootCmd.Execute(); err != nil {
+		fmt.Println(err)
+		os.Exit(1)
 	}
 }

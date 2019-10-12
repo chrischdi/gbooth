@@ -20,7 +20,7 @@ func init() {
 }
 
 var rootCmd = &cobra.Command{
-	Use: "gboothctl",
+	Use: "dslr",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		log.Printf("starting grpc server on %s", cmd.Flag("listen").Value.String())
 		lis, err := net.Listen("tcp", cmd.Flag("listen").Value.String())

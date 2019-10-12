@@ -14,27 +14,27 @@ tasks:
     - go build -o bin/gbooth-dslr -v -x -ldflags="-s -w" ./cmd/dslr
     env:
       GOOS: linux
-      CGO_ENABLED: 1
+      CGO_ENABLED: 0
 
-  dslr-arm:
-    desc: build dslr for amd64
-    deps: 
-    - dslr-arm-prepare
-    cmds:
-    - go build -o bin/gbooth-dslr -v -x -ldflags="-s -w" ./cmd/dslr || go build -o bin/gbooth-dslr -v -x -ldflags="-s -w" ./cmd/dslr
-    env:
-      CC: "{{.RASPBIAN_GCC}}"
-      CGO_CFLAGS: "--sysroot={{.RASPBIAN_SYSROOT}} -I{{.RASPBIAN_SYSROOT}}/usr/include"
-      CGO_LDFLAGS: "--sysroot={{.RASPBIAN_SYSROOT}} -I{{.RASPBIAN_SYSROOT}}/usr/include"
-      # PKG_CONFIG: "{{.RASPBIAN_SYSROOT}}/usr/bin/pkg-config"
-      PKG_CONFIG_DIR: ""
-      PKG_CONFIG_PATH: "{{.RASPBIAN_SYSROOT}}/usr/lib/{{.XARCH}}/pkgconfig/"
-      PKG_CONFIG_LIBDIR: "{{.RASPBIAN_SYSROOT}}/usr/lib/pkgconfig:{{.RASPBIAN_SYSROOT}}/usr/share/pkgconfig:{{.RASPBIAN_SYSROOT}}/usr/lib/arm-linux-gnueabihf/pkgconfig"
-      PKG_CONFIG_SYSROOT_DIR: "{{.RASPBIAN_SYSROOT}}"
-      GOARCH: arm
-      GOARM: 7
-      GOOS: linux
-      CGO_ENABLED: 1
+#  dslr-arm:
+#    desc: build dslr for amd64
+#    deps: 
+#    - dslr-arm-prepare
+#    cmds:
+#    - go build -o bin/gbooth-dslr -v -x -ldflags="-s -w" ./cmd/dslr || go build -o bin/gbooth-dslr -v -x -ldflags="-s -w" ./cmd/dslr
+#    env:
+#      CC: "{{.RASPBIAN_GCC}}"
+#      CGO_CFLAGS: "--sysroot={{.RASPBIAN_SYSROOT}} -I{{.RASPBIAN_SYSROOT}}/usr/include"
+#      CGO_LDFLAGS: "--sysroot={{.RASPBIAN_SYSROOT}} -I{{.RASPBIAN_SYSROOT}}/usr/include"
+#      # PKG_CONFIG: "{{.RASPBIAN_SYSROOT}}/usr/bin/pkg-config"
+#      PKG_CONFIG_DIR: ""
+#      PKG_CONFIG_PATH: "{{.RASPBIAN_SYSROOT}}/usr/lib/{{.XARCH}}/pkgconfig/"
+#      PKG_CONFIG_LIBDIR: "{{.RASPBIAN_SYSROOT}}/usr/lib/pkgconfig:{{.RASPBIAN_SYSROOT}}/usr/share/pkgconfig:{{.RASPBIAN_SYSROOT}}/usr/lib/arm-linux-gnueabihf/pkgconfig"
+#      PKG_CONFIG_SYSROOT_DIR: "{{.RASPBIAN_SYSROOT}}"
+#      GOARCH: arm
+#      GOARM: 7
+#      GOOS: linux
+#      CGO_ENABLED: 1
 
   dslr-arm-prepare:
     desc: prepare environment for arm

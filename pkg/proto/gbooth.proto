@@ -3,13 +3,41 @@ syntax = "proto3";
 package proto;
 
 service DSLR {
-    rpc Capture(ImageRequest) returns (ImageResponse) {}
+    rpc Capture(Request) returns (ImageResponse) {}
+    rpc GetDate(Request) returns (DateResponse) {}
 }
 
-message ImageRequest {
+message Request {
 }
 
 message ImageResponse {
+    string name = 1;
+}
+message DateResponse {
+    string date = 1;
+}
+
+service UI {
+    rpc Background(Image) returns (UIResponse) {}
+    rpc Timer(TextRequest) returns (UIResponse) {}
+    rpc Error(TextRequest) returns (UIResponse) {}
+}
+
+message Image {
     bytes image = 1;
-    string format = 2;
+}
+
+message TextRequest {
+    string text = 1;
+}
+
+message UIResponse {
+}
+
+service Core {
+    rpc Trigger(TriggerRequest) returns (CoreResponse) {}
+}
+message TriggerRequest {
+}
+message CoreResponse {
 }

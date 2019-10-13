@@ -14,6 +14,7 @@ tasks:
     - go build -o bin/gbooth-dslr -v -x -ldflags="-s -w" ./cmd/dslr
     env:
       GOOS: linux
+      CGO_ENABLED: 0
 
   ctl-amd64:
     desc: build ctl for amd64
@@ -29,7 +30,7 @@ tasks:
     - go build -o bin/gbooth-core -v -x -ldflags="-s -w" ./cmd/core
     env:
       GOOS: linux
-      CGO_ENABLED: 0
+      CGO_ENABLED: 1
 
   ui-amd64:
     desc: build ui for amd64
@@ -37,6 +38,7 @@ tasks:
     - go build -o bin/gbooth-ui -v -x -ldflags="-s -w" ./cmd/ui
     env:
       GOOS: linux
+      CGO_ENABLED: 1
       
   buzzer-amd64:
     desc: build buzzer for amd64
@@ -55,15 +57,7 @@ tasks:
       GOOS: linux
       GOARCH: arm
       GOARM: 7
-      CGO_ENABLED: 1
-      
-      CC: "{{.RASPBIAN_GCC}}"
-      CGO_CFLAGS: "--sysroot={{.RASPBIAN_SYSROOT}} -I{{.RASPBIAN_SYSROOT}}/usr/include"
-      CGO_LDFLAGS: "--sysroot={{.RASPBIAN_SYSROOT}} -I{{.RASPBIAN_SYSROOT}}/usr/include"
-      PKG_CONFIG_DIR: ""
-      PKG_CONFIG_PATH: "{{.RASPBIAN_SYSROOT}}/usr/lib/{{.XARCH}}/pkgconfig/"
-      PKG_CONFIG_LIBDIR: "{{.RASPBIAN_SYSROOT}}/usr/lib/pkgconfig:{{.RASPBIAN_SYSROOT}}/usr/share/pkgconfig:{{.RASPBIAN_SYSROOT}}/usr/lib/arm-linux-gnueabihf/pkgconfig"
-      PKG_CONFIG_SYSROOT_DIR: "{{.RASPBIAN_SYSROOT}}"
+      CGO_ENABLED: 0
 
   ctl-arm:
     desc: build ctl for arm
@@ -83,7 +77,15 @@ tasks:
       GOOS: linux
       GOARCH: arm
       GOARM: 7
-      CGO_ENABLED: 0
+      CGO_ENABLED: 1
+
+      CC: "{{.RASPBIAN_GCC}}"
+      CGO_CFLAGS: "--sysroot={{.RASPBIAN_SYSROOT}} -I{{.RASPBIAN_SYSROOT}}/usr/include"
+      CGO_LDFLAGS: "--sysroot={{.RASPBIAN_SYSROOT}} -I{{.RASPBIAN_SYSROOT}}/usr/include"
+      PKG_CONFIG_DIR: ""
+      PKG_CONFIG_PATH: "{{.RASPBIAN_SYSROOT}}/usr/lib/{{.XARCH}}/pkgconfig/"
+      PKG_CONFIG_LIBDIR: "{{.RASPBIAN_SYSROOT}}/usr/lib/pkgconfig:{{.RASPBIAN_SYSROOT}}/usr/share/pkgconfig:{{.RASPBIAN_SYSROOT}}/usr/lib/arm-linux-gnueabihf/pkgconfig"
+      PKG_CONFIG_SYSROOT_DIR: "{{.RASPBIAN_SYSROOT}}"
 
   ui-arm:
     desc: build ui for arm

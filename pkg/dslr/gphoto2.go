@@ -56,11 +56,14 @@ func (s *GPhoto2) GetDate(ctx context.Context, in *proto.Request) (*proto.DateRe
 
 	lines := strings.Split(stdout, "\n")
 	if len(lines) != 9 {
-		return nil, status.Errorf(codes.OutOfRange, "expected 9 lines on stdout, have %s", len(lines))
+		return nil, status.Errorf(codes.OutOfRange, "expected 9 lines on stdout, have %d", len(lines))
 	}
 
 	// Mon Jan 2 15:04:05 -0700 MST 2006
 	timeStamp, err := time.Parse("Mon 2 Jan 2006 15:04:05 AM MST", strings.TrimPrefix(lines[4], "Printable: "))
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
 
 	return &proto.DateResponse{
 		Date: timeStamp.String(),

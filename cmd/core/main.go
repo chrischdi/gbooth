@@ -47,9 +47,9 @@ func (s *server) Trigger(ctx context.Context, in *proto.TriggerRequest) (*proto.
 	}
 
 	// take picture
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second*7)
-	defer cancel()
-	response, err := s.dslr.Capture(ctx, &proto.Request{})
+	ctxDSLR, cancelDSLR := context.WithTimeout(context.Background(), time.Second*7)
+	defer cancelDSLR()
+	response, err := s.dslr.Capture(ctxDSLR, &proto.Request{})
 	if err != nil {
 		return nil, fmt.Errorf("error on dslr.Capture: %v", err)
 	}
@@ -63,9 +63,9 @@ func (s *server) Trigger(ctx context.Context, in *proto.TriggerRequest) (*proto.
 	// scale b, we have a max of 4 MB to send via grpc
 
 	// publish picture
-	ctx, cancel = context.WithTimeout(context.Background(), time.Second*3)
-	defer cancel()
-	if _, err := s.ui.Background(ctx, &proto.Image{
+	ctxUI, cancelUI := context.WithTimeout(context.Background(), time.Second*3)
+	defer cancelUI()
+	if _, err := s.ui.Background(ctxUI, &proto.Image{
 		Image: b,
 	}); err != nil {
 		return nil, fmt.Errorf("error on ui.Background: %v", err)

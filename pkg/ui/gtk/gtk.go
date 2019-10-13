@@ -92,8 +92,6 @@ func (ui *GTK) Init() error {
 	}
 
 	return ui.Publish(img)
-
-	return nil
 }
 
 func (ui *GTK) Free() error {
@@ -268,10 +266,6 @@ func createContent(arrows *gdk.Pixbuf) (*gtk.Image, *gtk.Image, *gtk.Overlay, *g
 	l.SetLineWrap(true)
 
 	o.AddOverlay(l)
-
-	if err != nil {
-		return nil, nil, nil, nil, fmt.Errorf("error creating draw handler: %v", err)
-	}
 
 	return i, iArrows, o, l, nil
 }

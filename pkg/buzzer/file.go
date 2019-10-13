@@ -9,8 +9,5 @@ type FileBuzzer struct {
 
 func (b *FileBuzzer) Pressed() bool {
 	_, err := os.Stat(b.File)
-	if err != nil {
-		return false
-	}
-	return true
+	return err != nil
 }

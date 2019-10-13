@@ -55,7 +55,10 @@ func (s *server) Trigger(ctx context.Context, in *proto.TriggerRequest) (*proto.
 
 		ctxError, cancelError := context.WithTimeout(context.Background(), time.Second*3)
 		defer cancelError()
-		s.ui.Error(ctxError, &proto.TextRequest{Text: errMsg})
+		_, err := s.ui.Error(ctxError, &proto.TextRequest{Text: errMsg})
+		if err != nil {
+			log.Printf("error showing error: %v", err)
+		}
 
 		return nil, status.Error(codes.Internal, errMsg)
 	}
@@ -86,9 +89,9 @@ func getResized(path string) ([]byte, error) {
 		Width:  1920,
 		Height: 1080,
 		Embed:  true,
-		Crop: true,
+		Crop:   true,
 	}
-	
+
 	newImage, err := bimg.NewImage(buffer).Process(options)
 	if err != nil {
 		return nil, err

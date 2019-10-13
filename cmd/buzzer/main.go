@@ -35,8 +35,6 @@ var rootCmd = &cobra.Command{
 				log.Printf("error detected: %v", err)
 			}
 		}
-
-		return fmt.Errorf("this should have never been reached")
 	},
 }
 

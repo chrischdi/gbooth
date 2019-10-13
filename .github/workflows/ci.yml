@@ -84,6 +84,7 @@ jobs:
         docker run --name multiarch --rm --privileged multiarch/qemu-user-static:register
     - name: build
       run: |
+        find tmp/rpi-tools/ -iname "*-gcc"
         /opt/task build:${{ matrix.binary }}-arm
 
     - uses: actions/upload-artifact@master

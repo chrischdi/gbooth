@@ -14,7 +14,6 @@ tasks:
     - go build -o bin/gbooth-dslr -v -x -ldflags="-s -w" ./cmd/dslr
     env:
       GOOS: linux
-      CGO_ENABLED: 0
 
   ctl-amd64:
     desc: build ctl for amd64

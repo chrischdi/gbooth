@@ -24,4 +24,4 @@ if ! [ -x "$(command -v golangci-lint)" ]; then
 fi
 
 echo '[golangci-lint/prepare]: running golangci-lint' >&2
-golangci-lint run --skip-dirs ./vendor
+golangci-lint run --deadline 10m --skip-dirs ./vendor

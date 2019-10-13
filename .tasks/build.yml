@@ -27,7 +27,7 @@ tasks:
   core-amd64:
     desc: build core for amd64
     cmds:
-    - go build -o bin/gbooth-core -v -x -ldflags="-s -w" ./cmd/core
+    - go build -o bin/gbooth-core -v -x -ldflags="-s -w" ./cmd/core || go build -o bin/gbooth-core -v -x -ldflags="-s -w" ./cmd/core
     env:
       GOOS: linux
       CGO_ENABLED: 1
@@ -72,7 +72,7 @@ tasks:
   core-arm:
     desc: build core for arm
     cmds:
-    - go build -o bin/gbooth-core -v -x -ldflags="-s -w" ./cmd/core
+    - go build -o bin/gbooth-core -v -x -ldflags="-s -w" ./cmd/core || go build -o bin/gbooth-core -v -x -ldflags="-s -w" ./cmd/core
     env:
       GOOS: linux
       GOARCH: arm

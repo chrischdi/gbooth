@@ -38,6 +38,15 @@ tasks:
     - go build -o bin/gbooth-ui -v -x -ldflags="-s -w" ./cmd/ui
     env:
       GOOS: linux
+      
+  buzzer-amd64:
+    desc: build buzzer for amd64
+    cmds:
+    - go build -o bin/gbooth-buzzer -v -x -ldflags="-s -w" ./cmd/buzzer
+    env:
+      GOOS: linux
+      CGO_ENABLED: 0
+
 
 #  dslr-arm:
 #    desc: build dslr for amd64

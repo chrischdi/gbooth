@@ -21,7 +21,7 @@ jobs:
     - name: install dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y build-essential gphoto2 libc6 libc6-dev libgphoto2-dev pkg-config gtk3
+        sudo apt-get install -y build-essential gphoto2 libc6 libc6-dev libgphoto2-dev pkg-config libgtk-3-dev
     - name: execute checks
       run: |
         /opt/task checks:all
@@ -43,14 +43,15 @@ jobs:
     - name: install dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y build-essential gphoto2 libc6 libc6-dev libgphoto2-dev pkg-config
+        sudo apt-get install -y build-essential gphoto2 libc6 libc6-dev libgphoto2-dev pkg-config libgtk-3-dev
     - name: build
       run: |
         /opt/task build:${{ matrix.binary }}-amd64
+
     - uses: actions/upload-artifact@master
       with:
-        name: gbooth-{{ matrix.binary }}-amd64
-        path: bin/gbooth-{{ matrix.binary }}
+        name: "gbooth-${{ matrix.binary }}-amd64"
+        path: "bin/gbooth-${{ matrix.binary }}"
 
   # build-arm:
   #   runs-on: ubuntu-latest

@@ -27,7 +27,7 @@ tasks:
   core-amd64:
     desc: build core for amd64
     cmds:
-    - go build -o bin/gbooth-core -v -x -ldflags="-s -w" ./cmd/core || go build -o bin/gbooth-core -v -x -ldflags="-s -w" ./cmd/core
+    - go build -o bin/gbooth-core -v -x -ldflags="-s -w" ./cmd/core
     env:
       GOOS: linux
       CGO_ENABLED: 1
@@ -53,6 +53,8 @@ tasks:
     desc: build dslr for arm
     cmds:
     - go build -o bin/gbooth-dslr -v -x -ldflags="-s -w" ./cmd/dslr
+    deps:
+      - dslr-arm-prepare
     env:
       GOOS: linux
       GOARCH: arm
@@ -63,6 +65,8 @@ tasks:
     desc: build ctl for arm
     cmds:
     - go build -o bin/gbooth-ctl -v -x -ldflags="-s -w" ./cmd/ctl
+    deps:
+      - dslr-arm-prepare
     env:
       GOOS: linux
       GOARCH: arm
@@ -72,7 +76,9 @@ tasks:
   core-arm:
     desc: build core for arm
     cmds:
-    - go build -o bin/gbooth-core -v -x -ldflags="-s -w" ./cmd/core || go build -o bin/gbooth-core -v -x -ldflags="-s -w" ./cmd/core
+    - go build -o bin/gbooth-core -v -x -ldflags="-s -w" ./cmd/core
+    deps:
+      - dslr-arm-prepare
     env:
       GOOS: linux
       GOARCH: arm
@@ -91,6 +97,8 @@ tasks:
     desc: build ui for arm
     cmds:
     - go build -o bin/gbooth-ui -v -x -ldflags="-s -w" ./cmd/ui
+    deps:
+      - dslr-arm-prepare
     env:
       GOOS: linux
       GOARCH: arm
@@ -109,6 +117,8 @@ tasks:
     desc: build buzzer for arm
     cmds:
     - go build -o bin/gbooth-buzzer -v -x -ldflags="-s -w" ./cmd/buzzer
+    deps:
+      - dslr-arm-prepare
     env:
       GOOS: linux
       GOARCH: arm
@@ -120,7 +130,7 @@ tasks:
 # #    deps: 
 # #    - dslr-arm-prepare
 # #    cmds:
-# #    - go build -o bin/gbooth-dslr -v -x -ldflags="-s -w" ./cmd/dslr || go build -o bin/gbooth-dslr -v -x -ldflags="-s -w" ./cmd/dslr
+# #    - go build -o bin/gbooth-dslr -v -x -ldflags="-s -w" ./cmd/dslr
 # #    env:
 #       CC: "{{.RASPBIAN_GCC}}"
 #       CGO_CFLAGS: "--sysroot={{.RASPBIAN_SYSROOT}} -I{{.RASPBIAN_SYSROOT}}/usr/include"

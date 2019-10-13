@@ -16,6 +16,29 @@ tasks:
       GOOS: linux
       CGO_ENABLED: 0
 
+  ctl-amd64:
+    desc: build ctl for amd64
+    cmds:
+    - go build -o bin/gbooth-ctl -v -x -ldflags="-s -w" ./cmd/ctl
+    env:
+      GOOS: linux
+      CGO_ENABLED: 0
+
+  core-amd64:
+    desc: build core for amd64
+    cmds:
+    - go build -o bin/gbooth-core -v -x -ldflags="-s -w" ./cmd/core
+    env:
+      GOOS: linux
+      CGO_ENABLED: 0
+
+  ui-amd64:
+    desc: build ui for amd64
+    cmds:
+    - go build -o bin/gbooth-ui -v -x -ldflags="-s -w" ./cmd/ui
+    env:
+      GOOS: linux
+
 #  dslr-arm:
 #    desc: build dslr for amd64
 #    deps: 

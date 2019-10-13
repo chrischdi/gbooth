@@ -53,6 +53,32 @@ jobs:
         name: "gbooth-${{ matrix.binary }}-amd64"
         path: "bin/gbooth-${{ matrix.binary }}"
 
+  build-arm:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        binary: [core, ctl, dslr, ui, buzzer]
+    steps:
+    - uses: actions/checkout@v1
+    - name: download task
+      run: |
+        pushd $(mktemp -d)
+        wget https://github.com/go-task/task/releases/download/v2.7.0/task_linux_amd64.tar.gz
+        tar -xvzf task_linux_amd64.tar.gz
+        mv task /opt/
+        popd
+    - name: register binfmt multiarch
+      run: |
+        docker run --name multiarch --rm --privileged multiarch/qemu-user-static:register
+    - name: build
+      run: |
+        /opt/task build:${{ matrix.binary }}-arm
+
+    - uses: actions/upload-artifact@master
+      with:
+        name: "gbooth-${{ matrix.binary }}-arm"
+        path: "bin/gbooth-${{ matrix.binary }}"
+
   # build-arm:
   #   runs-on: ubuntu-latest
   #   steps:

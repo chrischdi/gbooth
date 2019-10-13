@@ -10,4 +10,7 @@ RUN apt-get update && \
     build-essential \
     libc6-dev \
     libgphoto2-dev \
-    pkg-config
+    pkg-config \
+    libc6-dev \
+    libgtk-3-dev \
+    libvips-tools

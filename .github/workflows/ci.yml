@@ -10,6 +10,10 @@ jobs:
   checks-all:
     runs-on: ubuntu-latest
     steps:
+    - name: Install Go
+      uses: actions/setup-go@v1
+      with:
+        go-version: 1.13
     - uses: actions/checkout@v1
     - name: download task
       run: |
@@ -32,6 +36,10 @@ jobs:
       matrix:
         binary: [core, ctl, dslr, ui, buzzer]
     steps:
+    - name: Install Go
+      uses: actions/setup-go@v1
+      with:
+        go-version: 1.13
     - uses: actions/checkout@v1
     - name: download task
       run: |
@@ -59,6 +67,10 @@ jobs:
       matrix:
         binary: [core, ctl, dslr, ui, buzzer]
     steps:
+    - name: Install Go
+      uses: actions/setup-go@v1
+      with:
+        go-version: 1.13
     - uses: actions/checkout@v1
     - name: download task
       run: |

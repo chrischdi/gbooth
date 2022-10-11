@@ -4,13 +4,13 @@ import (
 	"context"
 	"flag"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"net"
 	"sync"
 	"time"
 
 	"google.golang.org/grpc/codes"
+	"gopkg.in/h2non/bimg.v1"
 
 	"github.com/chrischdi/gbooth/pkg/constants"
 	"github.com/chrischdi/gbooth/pkg/proto"
@@ -51,16 +51,22 @@ func (s *server) Trigger(ctx context.Context, in *proto.TriggerRequest) (*proto.
 	defer cancelDSLR()
 	response, err := s.dslr.Capture(ctxDSLR, &proto.Request{})
 	if err != nil {
-		return nil, fmt.Errorf("error on dslr.Capture: %v", err)
+		errMsg := fmt.Sprintf("error on dslr.Capture: %v", err)
+
+		ctxError, cancelError := context.WithTimeout(context.Background(), time.Second*3)
+		defer cancelError()
+		_, err := s.ui.Error(ctxError, &proto.TextRequest{Text: errMsg})
+		if err != nil {
+			log.Printf("error showing error: %v", err)
+		}
+
+		return nil, status.Error(codes.Internal, errMsg)
 	}
 
-	b, err := ioutil.ReadFile(response.GetName())
+	b, err := getResized(response.GetName())
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}
-
-	b = b[:4194204]
-	// scale b, we have a max of 4 MB to send via grpc
 
 	// publish picture
 	ctxUI, cancelUI := context.WithTimeout(context.Background(), time.Second*3)
@@ -72,6 +78,25 @@ func (s *server) Trigger(ctx context.Context, in *proto.TriggerRequest) (*proto.
 	}
 
 	return &proto.CoreResponse{}, nil
+}
+
+func getResized(path string) ([]byte, error) {
+	buffer, err := bimg.Read(path)
+	if err != nil {
+		return nil, err
+	}
+	options := bimg.Options{
+		Width:  1920,
+		Height: 1080,
+		Embed:  true,
+		Crop:   true,
+	}
+
+	newImage, err := bimg.NewImage(buffer).Process(options)
+	if err != nil {
+		return nil, err
+	}
+	return newImage, nil
 }
 
 func main() {

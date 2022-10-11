@@ -9,4 +9,6 @@ require (
 	github.com/spf13/cobra v0.0.5
 	golang.org/x/image v0.0.0-20181116024801-cd38e8056d9b // indirect
 	google.golang.org/grpc v1.24.0
+	gopkg.in/h2non/bimg.v1 v1.0.19
+	periph.io/x/periph v3.3.0+incompatible
 )

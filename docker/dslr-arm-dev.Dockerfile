@@ -6,8 +6,14 @@ RUN apt-get update && \
     libc6
 
 RUN apt-get update && \
-  apt-get install -y \
+  DEBIAN_FRONTEND=noninteractive apt-get install -y \
     build-essential \
     libc6-dev \
     libgphoto2-dev \
-    pkg-config
+    pkg-config 
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
+    libc6-dev
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
+    libgtk-3-dev 
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
+    libvips-tools
